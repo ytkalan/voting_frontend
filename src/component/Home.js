@@ -34,11 +34,12 @@ const Home = () => {
         const activeCampaign = data.filter(
           (campaign) => campaign.status === CampaignStatus.active,
         ).sort((x, y) => y.number_of_vote - x.number_of_vote);
-        // sort inactive campaign using end time
+        // // sort inactive campaign using end time
         const inactiveCampaign = data.filter(
           (campaign) => campaign.status !== CampaignStatus.active,
         ).sort((x, y) => new Date(y.end_time) - new Date(x.end_time));
-        setvoteCampaignList(activeCampaign + inactiveCampaign);
+        const orderedCampaign = activeCampaign.concat(inactiveCampaign);
+        setvoteCampaignList(orderedCampaign);
         setErrorMessage('');
       } catch (error) {
         setErrorMessage('unknown error');

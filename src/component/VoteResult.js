@@ -45,10 +45,10 @@ const VoteResult = ({ voteCampaignDetail, myVote }) => {
 VoteResult.propTypes = {
   voteCampaignDetail: PropTypes.shape({
     campaign_id: PropTypes.number.isRequired,
-    options: PropTypes.shape({
+    options: PropTypes.arrayOf(PropTypes.shape({
       option_code: PropTypes.string.isRequired,
       option_detail: PropTypes.string.isRequired,
-    }),
+    })),
   }).isRequired,
   myVote: PropTypes.string.isRequired,
 };

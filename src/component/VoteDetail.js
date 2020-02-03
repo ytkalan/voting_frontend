@@ -23,7 +23,6 @@ const useStyles = makeStyles({
     padding: '10px',
   },
   errorMessage: {
-    color: 'white',
     textAlign: 'center',
     padding: '20px',
   },
@@ -52,6 +51,7 @@ const VoteDetail = () => {
         setVoteCampaign(response.data);
       } catch (error) {
         setErrorMessage(error.response.data.detail);
+        setVoteCampaign({});
       }
     };
     fetchData();
@@ -62,21 +62,33 @@ const VoteDetail = () => {
     setMyVote('');
   }, [campaignId]);
 
-  const { question } = voteCampaign;
-  const detailComponent = voteCampaign.status !== CampaignStatus.active || checkResult === true ? (
-    <VoteResult
-      voteCampaignDetail={voteCampaign}
-      back={() => setReturnHome(true)}
-      myVote={myVote}
-    />
-  ) : (
-    <VoteQuestion
-      voteCampaignDetail={voteCampaign}
-      checkResult={() => setCheckResult(true)}
-      setMyVote={(optionCode) => setMyVote(optionCode)}
-      back={() => setReturnHome(true)}
-    />
-  );
+  let detailComponent;
+  switch (Object.keys(voteCampaign).length > 0) {
+    case true: {
+      if (voteCampaign.status !== CampaignStatus.active || checkResult) {
+        detailComponent = (
+          <VoteResult
+            voteCampaignDetail={voteCampaign}
+            back={() => setReturnHome(true)}
+            myVote={myVote}
+          />
+        );
+        break;
+      }
+      detailComponent = (
+        <VoteQuestion
+          voteCampaignDetail={voteCampaign}
+          checkResult={() => setCheckResult(true)}
+          setMyVote={(optionCode) => setMyVote(optionCode)}
+          back={() => setReturnHome(true)}
+        />
+      );
+      break;
+    }
+    default: {
+      detailComponent = null;
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -84,18 +96,19 @@ const VoteDetail = () => {
       <Typography className={classes.title} variant="h5" align="center" gutterBottom>
         {`Camapign ${campaignId}`}
       </Typography>
-      {errorMessage ? (
-        <Typography className={classes.errorMessage} variant="body1" align="center" gutterBottom>
+      {errorMessage && (
+        <Typography className={classes.errorMessage} color="secondary" variant="body1" align="center" gutterBottom>
           {errorMessage === APIError.notFound ? (
             ErrorDetail.campaignNotExist
           ) : (
             ErrorDetail.unknwonError
           )}
         </Typography>
-      ) : (
+      )}
+      {Object.keys(voteCampaign).length > 0 && (
         <>
           <Typography className={classes.title} variant="h5" align="center" gutterBottom>
-            {question}
+            {voteCampaign.question}
           </Typography>
           <Typography className={classes.title} variant="body1" align="center">
             {`Start time: ${new Date(`${voteCampaign.start_time}Z`).toLocaleDateString('en-US')} ${new Date(`${voteCampaign.start_time}Z`).toLocaleTimeString('en-US')}`}

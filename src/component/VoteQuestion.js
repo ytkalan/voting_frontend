@@ -46,8 +46,8 @@ const VoteQuestion = ({ voteCampaignDetail, checkResult, setMyVote }) => {
   const [hkidValue, setHkidValue] = useState('');
   const [voteError, setVoteError] = useState('');
   const {
-    campaign_id: campaginId = '',
-    options = [],
+    campaign_id: campaginId,
+    options
   } = voteCampaignDetail;
 
   const submitVote = async () => {
@@ -128,10 +128,10 @@ const VoteQuestion = ({ voteCampaignDetail, checkResult, setMyVote }) => {
 VoteQuestion.propTypes = {
   voteCampaignDetail: PropTypes.shape({
     campaign_id: PropTypes.number.isRequired,
-    options: PropTypes.shape({
+    options: PropTypes.arrayOf(PropTypes.shape({
       option_code: PropTypes.string.isRequired,
       option_detail: PropTypes.string.isRequired,
-    }),
+    })),
   }).isRequired,
   checkResult: PropTypes.func.isRequired,
   setMyVote: PropTypes.func.isRequired,
