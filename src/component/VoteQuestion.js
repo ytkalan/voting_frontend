@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 
 import { makeStyles } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Grid from '@material-ui/core/Grid';
-import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import qs from 'qs';
+import WhiteRadio from './WhiteRadio';
+import { ErrorDetail, APIError } from '../constant';
 
 const useStyles = makeStyles({
   title: {
@@ -39,16 +39,6 @@ const useStyles = makeStyles({
     padding: '5px',
   },
 });
-
-const WhiteRadio = withStyles({
-  root: {
-    color: 'white',
-    '&checked': {
-      color: 'white',
-    },
-  },
-// eslint-disable-next-line react/jsx-props-no-spreading
-})((props) => <Radio color="default" {...props} />);
 
 const VoteQuestion = ({ voteCampaignDetail, checkResult, setMyVote }) => {
   const classes = useStyles();
@@ -119,9 +109,11 @@ const VoteQuestion = ({ voteCampaignDetail, checkResult, setMyVote }) => {
         voteError && (
           <Grid item>
             <Typography variant="caption" color="secondary">
-              {voteError === 'INVALID_INPUT' && 'Incorrect ID.'}
-              {voteError === 'ALREADY_VOTE' && 'You have voted in this campaign.'}
-              {(voteError !== 'INVALID_INPUT' && voteError !== 'ALREADY_VOTE') && 'Some error occurs.'}
+              {voteError === APIError.invalidInput && ErrorDetail.incorrectId}
+              {voteError === APIError.alreadyVote && ErrorDetail.alreadyVote}
+              {(voteError !== APIError.invalidInput && voteError !== APIError.alreadyVote) && (
+                ErrorDetail.unknwonError
+              )}
             </Typography>
           </Grid>
         )
@@ -144,4 +136,5 @@ VoteQuestion.propTypes = {
   checkResult: PropTypes.func.isRequired,
   setMyVote: PropTypes.func.isRequired,
 };
+
 export default VoteQuestion;

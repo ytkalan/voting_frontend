@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import axios from 'axios';
 import VoteQuestion from './VoteQuestion';
 import VoteResult from './VoteResult';
+import { errorDetail, APIError } from '../constant';
 
 const useStyles = makeStyles({
   root: {
@@ -81,10 +82,10 @@ const VoteDetail = () => {
       </Typography>
       {errorMessage ? (
         <Typography className={classes.errorMessage} variant="body1" align="center" gutterBottom>
-          {errorMessage === 'NOT_FOUND' ? (
-            'Campaign does not exist.'
+          {errorMessage === APIError.notFound ? (
+            errorDetail.campaignNotExist
           ) : (
-            'Some errors occur.'
+            errorDetail.unknwonError
           )}
         </Typography>
       ) : (
