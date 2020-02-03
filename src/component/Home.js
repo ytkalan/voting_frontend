@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core';
 import axios from 'axios';
 import Carousel from 'react-material-ui-carousel';
 import VoteCampaignCard from './VoteCampaignCard';
-import { ErrorDetail } from '../constant';
+import { ErrorDetail, CampaignStatus } from '../constant';
 
 const useStyles = makeStyles({
   root: {
@@ -29,7 +29,17 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/campaign/`);
-        setvoteCampaignList(response.data);
+        const { data } = response;
+        // sort active campaign using number of vote
+        const activeCampaign = data.filter(
+          (campaign) => campaign.status === CampaignStatus.active,
+        ).sort((x, y) => y.number_of_vote - x.number_of_vote);
+        // sort inactive campaign using end time
+        const inactiveCampaign = data.filter(
+          (campaign) => campaign.status !== CampaignStatus.active,
+        ).sort((x, y) => new Date(y.end_time) - new Date(x.end_time));
+        setvoteCampaignList(activeCampaign + inactiveCampaign);
+        setErrorMessage('');
       } catch (error) {
         setErrorMessage('unknown error');
       }
@@ -48,11 +58,9 @@ const Home = () => {
         </Typography>
       ) : (
         <Carousel className={classes.carousel} autoPlay={false}>
-          {
-            voteCampaignList.map((data) => (
-              <VoteCampaignCard key={`${data.campaign_id}`} votingCampaignData={data} />
-            ))
-          }
+          {voteCampaignList.map((data) => (
+            <VoteCampaignCard key={`${data.campaign_id}`} votingCampaignData={data} />
+          ))}
         </Carousel>
       )}
     </div>

@@ -49,7 +49,6 @@ const VoteDetail = () => {
           `${process.env.REACT_APP_API_URL}/campaign/${campaignId}/`,
         );
         setErrorMessage('');
-        setMyVote('');
         setVoteCampaign(response.data);
       } catch (error) {
         setErrorMessage(error.response.data.detail);
@@ -57,6 +56,11 @@ const VoteDetail = () => {
     };
     fetchData();
   }, [campaignId, checkResult]);
+
+  // clear vote record when switch to another campaign
+  useEffect(() => {
+    setMyVote('');
+  }, [campaignId]);
 
   const { question } = voteCampaign;
   const detailComponent = voteCampaign.status !== CampaignStatus.active || checkResult === true ? (
