@@ -4,13 +4,13 @@ export const APIError = {
   notFound: 'NOT_FOUND',
 };
 
-export const campaignStatus = {
+export const CampaignStatus = {
   active: 'ACTIVE',
   notStart: 'NOT_START',
   closed: 'CLOSED',
 };
 
-export const errorDetail = {
+export const ErrorDetail = {
   unknwonError: 'Some error occurs. Please try again later',
   campaignNotExist: 'Campaign does not exist.',
   alreadyVote: 'You have voted in this campaign.',

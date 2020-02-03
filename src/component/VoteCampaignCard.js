@@ -7,6 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
+import { CampaignStatus } from '../constant';
 
 const useStyles = makeStyles({
   paperRoot: {
@@ -59,14 +60,14 @@ const VotingCampaignCard = ({ votingCampaignData }) => {
         {`Total number of vote: ${numberOfVote}`}
       </Typography>
       <Typography className={classes.detail} variant="body1" align="center">
-        {status === 'ACTIVE' && 'You can still vote in this campaign.'}
-        {status === 'CLOSED' && 'This campaign has closed.'}
-        {status === 'NOT_START' && 'This campaign will start later.'}
+        {status === CampaignStatus.active && 'You can still vote in this campaign.'}
+        {status === CampaignStatus.closed && 'This campaign has ended.'}
+        {status === CampaignStatus.notStart && 'This campaign will start later.'}
       </Typography>
       <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
           <Button className={classes.button} variant="outlined" onClick={() => setRedirect(true)}>
-            {status === 'ACTIVE' ? 'Vote' : 'Detail'}
+            {status === CampaignStatus.active ? 'Vote' : 'Detail'}
           </Button>
         </Grid>
       </Grid>
