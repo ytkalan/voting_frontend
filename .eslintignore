@@ -1,0 +1,4 @@
+src/serviceWorker.js
+src/setupTest.js
+node_modules/*
+build/*

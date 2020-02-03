@@ -1,16 +1,15 @@
+import React, { useEffect, useState } from 'react';
 
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
-import Carousel from 'react-material-ui-carousel';
+import { makeStyles } from '@material-ui/core';
 import axios from 'axios';
+import Carousel from 'react-material-ui-carousel';
 import VoteCampaignCard from './VoteCampaignCard';
 
 const useStyles = makeStyles({
   root: {
-    padding: '10% 15% 0% 15%',
-    minWidth: '300px',
-    maxHeight: '90%',
+    padding: '10%',
+    minWidth: '320px',
   },
   title: {
     color: 'white',
@@ -18,7 +17,7 @@ const useStyles = makeStyles({
   },
   carousel: {
     padding: '30px',
-  }
+  },
 });
 
 const Home = () => {
@@ -29,7 +28,7 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${process.env.REACT_APP_API_URL}/campaign/`);
-        await setvoteCampaignList(response.data);
+        setvoteCampaignList(response.data);
       } catch (error) {
         setErrorMessage('unknown error');
       }
@@ -39,30 +38,24 @@ const Home = () => {
 
   return (
     <div className={classes.root}>
-      <Typography className={classes.title} variant='h5' align='center' gutterBottom>
-        {'Vote Campaign'}
+      <Typography className={classes.title} variant="h5" align="center" gutterBottom>
+        Vote Campaign
       </Typography>
-      {
-        !errorMessage && (
-          <Carousel className={classes.carousel} autoPlay={false}>
-            {
-              voteCampaignList.map(data => (
-                <VoteCampaignCard key={`${data.campaign_id}`}votingCampaignData={data}/>
-              ))
-            }
-          </Carousel>
-        )
-      }
-      {
-        errorMessage && (
-          <Typography variant='body1' color='secondary' align='center'>
-            {'Some errors occur. Please try again later.'}
-          </Typography>
-        )
-      }
+      {errorMessage ? (
+        <Typography variant="body1" color="secondary" align="center">
+          Some errors occur. Please try again later.
+        </Typography>
+      ) : (
+        <Carousel className={classes.carousel} autoPlay={false}>
+          {
+            voteCampaignList.map((data) => (
+              <VoteCampaignCard key={`${data.campaign_id}`} votingCampaignData={data} />
+            ))
+          }
+        </Carousel>
+      )}
     </div>
   );
-}
+};
 
 export default Home;
-

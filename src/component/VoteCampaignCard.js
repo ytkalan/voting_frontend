@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles({
   paperRoot: {
@@ -32,42 +34,55 @@ const useStyles = makeStyles({
   },
 });
 
-const VotingCampaignCard = ({votingCampaignData}) => {
+const VotingCampaignCard = ({ votingCampaignData }) => {
   const classes = useStyles();
   const [redirect, setRedirect] = useState(false);
   const {
-    campaign_id,
+    campaign_id: campaignId,
     question,
-    start_time,
-    end_time,
-    is_active_campaign,
-    number_of_vote
+    start_time: startTime,
+    end_time: endTime,
+    status,
+    number_of_vote: numberOfVote,
   } = votingCampaignData;
 
   return (
-    <Paper className={classes.paperRoot} variant='outlined'>
-      {redirect && <Redirect to={`/${campaign_id}`} />}
-      <Typography className={classes.question} variant='h5' align='center'>
+    <Paper className={classes.paperRoot} variant="outlined">
+      {redirect && <Redirect to={`/${campaignId}`} />}
+      <Typography className={classes.question} variant="h5" align="center">
         {question}
       </Typography>
-      <Typography className={classes.detail} variant='body1' align='center'>
-        {`Voting period from ${new Date(`${start_time}Z`).toLocaleDateString("en-US")} to ${new Date(`${end_time}Z`).toLocaleDateString("en-US")}`}
+      <Typography className={classes.detail} variant="body1" align="center">
+        {`Voting period from ${new Date(`${startTime}Z`).toLocaleDateString('en-US')} to ${new Date(`${endTime}Z`).toLocaleDateString('en-US')}`}
       </Typography>
-      <Typography className={classes.detail} variant='body1' align='center'>
-        {`Total number of vote: ${number_of_vote}`}
+      <Typography className={classes.detail} variant="body1" align="center">
+        {`Total number of vote: ${numberOfVote}`}
       </Typography>
-      <Typography className={classes.detail} variant='body1' align='center'>
-        {is_active_campaign ? 'You can still vote in this campaign.' : 'The vote campaign has closed.'}
+      <Typography className={classes.detail} variant="body1" align="center">
+        {status === 'ACTIVE' && 'You can still vote in this campaign.'}
+        {status === 'CLOSED' && 'This campaign has closed.'}
+        {status === 'NOT_START' && 'This campaign will start later.'}
       </Typography>
-      <Grid container direction='row' justify='center' alignItems='center'>
+      <Grid container direction="row" justify="center" alignItems="center">
         <Grid item>
-          <Button className={classes.button} variant='outlined' onClick={()=>setRedirect(true)}>
-            {is_active_campaign ? 'Vote' : 'See Result'}
+          <Button className={classes.button} variant="outlined" onClick={() => setRedirect(true)}>
+            {status === 'ACTIVE' ? 'Vote' : 'Detail'}
           </Button>
         </Grid>
       </Grid>
     </Paper>
-  )
-}
+  );
+};
+
+VotingCampaignCard.propTypes = {
+  votingCampaignData: PropTypes.shape({
+    campaign_id: PropTypes.number,
+    question: PropTypes.string,
+    start_time: PropTypes.string,
+    end_time: PropTypes.string,
+    status: PropTypes.string,
+    number_of_vote: PropTypes.number,
+  }).isRequired,
+};
 
 export default VotingCampaignCard;

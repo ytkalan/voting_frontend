@@ -1,25 +1,26 @@
 import React from 'react';
-import {
-  HashRouter as Router,
-  Switch,
-  Route,
-} from 'react-router-dom';
-import Home from './component/Home';
-import VoteDetail from './component/VoteDetail';
 import './App.css';
 
+import {
+  Route,
+  HashRouter as Router,
+  Switch,
+} from 'react-router-dom';
+
+import Home from './component/Home';
+import VoteDetail from './component/VoteDetail';
 
 const App = () => (
   <Router>
     <Switch>
-      <Route path='/:campaign_id'>
+      <Route path="/:campaign_id">
         <VoteDetail />
       </Route>
-      <Route path='/'>
+      <Route path="/">
         <Home />
       </Route>
     </Switch>
   </Router>
-)
+);
 
 export default App;
