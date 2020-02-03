@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core';
 import axios from 'axios';
 import Carousel from 'react-material-ui-carousel';
 import VoteCampaignCard from './VoteCampaignCard';
-import { errorDetail } from '../constant';
+import { ErrorDetail } from '../constant';
 
 const useStyles = makeStyles({
   root: {
@@ -44,7 +44,7 @@ const Home = () => {
       </Typography>
       {errorMessage ? (
         <Typography variant="body1" color="secondary" align="center">
-          {errorDetail.unknwonError}
+          {ErrorDetail.unknwonError}
         </Typography>
       ) : (
         <Carousel className={classes.carousel} autoPlay={false}>
